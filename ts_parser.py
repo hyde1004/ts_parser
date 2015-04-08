@@ -1,5 +1,10 @@
 class TsParser:
-	pass
+	def __init__(self, ts_filename):
+		self.ts_filename = ts_filename
+		self.handle = open(self.ts_filename, 'rb')
+
+	def __del__(self):
+		self.handle.close
 
 if __name__ == '__main__':
 	PACKET_SIZE = 188
