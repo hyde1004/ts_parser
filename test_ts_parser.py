@@ -12,6 +12,9 @@ class TestTsParser(unittest.TestCase):
 		self.assertEqual(self.parser.ts_filename, TS_FILE_NAME)
 		self.assertIsNotNone(self.parser.handle)
 
+	def test_init_wrong_filename(self):
+		self.assertRaises(IOError, self.helper_wrong_filename)
+
 	@unittest.skip("I don't know how to check number of parameters")
 	def test_init_without_filename(self):
 		parser = TsParser()
@@ -25,10 +28,13 @@ class TestTsParser(unittest.TestCase):
 		self.assertRaises(EOFError, self.helper_loop_read )
 
 	def helper_loop_read(self):
-		self.parser = TsParser(TS_FILE_NAME)
+		parser = TsParser(TS_FILE_NAME)
 
 		while True:
-			packet = self.parser.read_one_packet()
-			
+			packet = parser.read_one_packet()
+
+	def helper_wrong_filename(self):
+		parser = TsParser('wrong_file.ts')
+
 if __name__ == '__main__':
 	unittest.main(warnings='ignore')

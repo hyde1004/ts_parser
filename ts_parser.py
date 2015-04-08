@@ -5,8 +5,9 @@ class TsParser:
 		self.ts_filename = ts_filename
 		self.handle = open(self.ts_filename, 'rb')
 
-	def __del__(self):
-		self.handle.close
+	# def __del__(self):
+	# 	if self.handle:
+	# 		self.handle.close()
 
 	def read_one_packet(self):
 		packet = self.handle.read(TsParser.PACKET_SIZE)
