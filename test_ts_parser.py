@@ -12,14 +12,12 @@ class TestTsParser(unittest.TestCase):
 		self.assertEqual(parser.ts_filename, TS_FILE_NAME)
 		self.assertIsNotNone(parser.handle)
 
-	def help_loop_read(self):
+	def helper_loop_read(self):
 		TS_FILE_NAME = '2_HDForum_H264.ts'
 		parser = TsParser(TS_FILE_NAME)
 
 		while True:
-			parser.read_one_packet()
-			if len(parser.packet) != 188:
-				raise ZeroDivisionError
+			packet = parser.read_one_packet()
 
 	def test_read_one_packet(self):
 		TS_FILE_NAME = '2_HDForum_H264.ts'
@@ -27,7 +25,8 @@ class TestTsParser(unittest.TestCase):
 		packet = parser.read_one_packet()
 		self.assertEqual(0x47, packet[0])
 
-		# self.assertRaises(ZeroDivisionError, self.help_loop_read )
+	def test_raise_exception_if_packet_is_less_size(self):
+		self.assertRaises(EOFError, self.helper_loop_read )
 
 if __name__ == '__main__':
 	unittest.main(warnings='ignore')

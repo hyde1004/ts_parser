@@ -7,7 +7,12 @@ class TsParser:
 		self.handle.close
 
 	def read_one_packet(self):
-		return self.handle.read(188)
+		packet = self.handle.read(188)
+
+		if len(packet) < 188:
+			raise EOFError
+		
+		return packet 
 
 if __name__ == '__main__':
 	PACKET_SIZE = 188
