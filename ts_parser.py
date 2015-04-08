@@ -7,7 +7,7 @@ class TsParser:
 		self.handle.close
 
 	def read_one_packet(self):
-		self.packet = self.handle.read(188)
+		return self.handle.read(188)
 
 if __name__ == '__main__':
 	PACKET_SIZE = 188
