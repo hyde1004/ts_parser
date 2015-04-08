@@ -1,0 +1,84 @@
+PACKET_SIZE = 188
+HEADER_SIZE = 4
+
+def printHeader(packet):
+	for i in range(HEADER_SIZE):
+		print(format(packet[i], '#04x'), end=' ')
+
+	print('')
+
+def getBits(oneByte, bitPos, numOfBit):
+	convToBin = bin(oneByte)[2:].zfill(8)
+	bits = convToBin[bitPos:bitPos+numOfBit]
+	return int(bits, 2)
+
+def parseHeader(packet):
+	sync_byte = packet[0]
+	tei = (packet[1] & 0x80) >> 7 == 1
+	pusi = (packet[1] & 0x40) >> 6 == 1
+	tp_priority = (packet[1] & 0x20) >> 5
+	pid = ( (packet[1] & 0x1f) << 8 ) | packet[2] 
+	tsc = (packet[3] & 0xC0) >> 6
+	afc = (packet[3] & 0x30) >> 4
+	continuity_counter = packet[3] & 0x0f
+
+	# sync_byte = getBits(packet[0], 0, 8)
+
+	# tei = getBits(packet[1], 0, 1) == 0b1
+	# pusi = getBits(packet[1], 1, 1) == 0b1
+	# tp_priority = getBits(packet[1], 2, 1) == 0b1
+	# pid = getBits(packet[1], 3, 3) | getBits(packet[2], 0, 8)
+
+	# tsc = getBits(packet[3], 0, 2)
+	# afc = getBits(packet[3], 2, 2)
+	# continuity_counter = getBits(packet[3], 4, 4)
+
+	if pid == 0:
+		print('sync_byte : ', format(sync_byte, '#04x'))
+		print('tei : ', tei)
+		print('pusi : ', pusi)
+		print('tp_priority : ', tp_priority)
+		print('pid : ', format(pid, '#04x'))
+		print('tsc : ', tsc)
+		print('afc : ', bin(afc))
+		print('continuity_counter : ', continuity_counter)
+		print('')
+
+try:
+	f = open('2_HDForum_H264.ts', 'rb')
+
+	while True:
+		readOnePacket = f.read(PACKET_SIZE)
+
+		# print(format(readOnePacket[0], '#04x'), format(readOnePacket[1], '#04x'), format(readOnePacket[2], '#04x'), format(readOnePacket[3], '#04x'))
+		# printHeader(readOnePacket)
+
+		# sync_byte = readOnePacket[0]
+		# tei = (readOnePacket[1] & 0x80) >> 7
+		# pusi = (readOnePacket[1] & 0x40) >> 6
+		# tp_priority = (readOnePacket[1] & 0x20) >> 5
+		# pid = ( (readOnePacket[1] & 0x1f) << 8 ) | readOnePacket[2] 
+		# tsc = (readOnePacket[3] & 0xC0) >> 6
+		# afc = (readOnePacket[3] & 0x30) >> 4
+		# continuity_counter = readOnePacket[3] & 0x0f
+
+		# print('sync_byte : ', format(sync_byte, '#04x'))
+		# print('tei : ', tei)
+		# print('pusi : ', pusi)
+		# print('tp_priority : ', tp_priority)
+		# print('pid : ', format(pid, '#04x'))
+		# print('tsc : ', tsc)
+		# print('afc : ', afc)
+		# print('continuity_counter : ', continuity_counter)
+
+		# parseHeader(readOnePacket)
+		if len(readOnePacket) != PACKET_SIZE:
+			raise IndexError
+
+	f.close()
+except IOError:
+	print("File isn't exist!")
+	# raise
+except IndexError:
+	print("End of file")
+
