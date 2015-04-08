@@ -17,12 +17,6 @@ class TestTsParser(unittest.TestCase):
 		parser = TsParser()
 		self.assertIsInstance(parser, TsParser)
 
-	def helper_loop_read(self):
-		self.parser = TsParser(TS_FILE_NAME)
-
-		while True:
-			packet = self.parser.read_one_packet()
-
 	def test_read_one_packet(self):
 		packet = self.parser.read_one_packet()
 		self.assertEqual(0x47, packet[0])
@@ -30,5 +24,11 @@ class TestTsParser(unittest.TestCase):
 	def test_raise_exception_if_packet_is_less_size(self):
 		self.assertRaises(EOFError, self.helper_loop_read )
 
+	def helper_loop_read(self):
+		self.parser = TsParser(TS_FILE_NAME)
+
+		while True:
+			packet = self.parser.read_one_packet()
+			
 if __name__ == '__main__':
 	unittest.main(warnings='ignore')

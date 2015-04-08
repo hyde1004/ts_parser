@@ -1,4 +1,6 @@
 class TsParser:
+	PACKET_SIZE = 188
+
 	def __init__(self, ts_filename):
 		self.ts_filename = ts_filename
 		self.handle = open(self.ts_filename, 'rb')
@@ -7,9 +9,9 @@ class TsParser:
 		self.handle.close
 
 	def read_one_packet(self):
-		packet = self.handle.read(188)
+		packet = self.handle.read(TsParser.PACKET_SIZE)
 
-		if len(packet) < 188:
+		if len(packet) < TsParser.PACKET_SIZE:
 			raise EOFError
 		
 		return packet 
